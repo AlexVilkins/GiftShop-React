@@ -1,12 +1,13 @@
 import styles from "./ProductsCard.module.scss";
 import React, { useState } from "react";
 
-function ProdCard({ obj, onPlus }) {
+function ProdCard({ obj, onPlus, onFavorite }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
 
   const favoriteOnClick = () => {
     setIsFavorite(!isFavorite);
+    onFavorite(obj);
   };
 
   const addOnClick = () => {

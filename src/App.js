@@ -1,4 +1,5 @@
 import Basket from "./components/Basket";
+import Favorite from "./components/Favorite";
 import Header from "./components/Header";
 import CategoriesCard from "./components/CategoriesCard";
 import ProductsCard from "./components/ProductsCard";
@@ -35,7 +36,9 @@ function App() {
   ]);
   const [products, setProducts] = React.useState([]);
   const [basketOpen, setBasketOpen] = React.useState(false);
+  const [favoriteOpen, setFavoriteOpen] = React.useState(false);
   const [addedItems, setAddedItems] = React.useState([]);
+  const [favoriteItems, setFavoriteItems] = React.useState([]);
   const [filterVal, setFilterVal] = React.useState("");
 
   React.useEffect(() => {
@@ -67,6 +70,14 @@ function App() {
     }
   };
 
+  const onAddToFavorite = (obj) => {
+    if (favoriteItems.some((item) => item.id === obj.id)) {
+      setFavoriteItems(favoriteItems.filter((item) => item.id !== obj.id));
+    } else {
+      setFavoriteItems([...favoriteItems, obj]);
+    }
+  };
+
   const onChangeFilter = (event) => {
     setFilterVal(event.target.value);
   };
@@ -80,10 +91,18 @@ function App() {
         onRemoveItem={(obj) => onAddToCart(obj)}
       />
 
+      <Favorite
+        favoritOpen={favoriteOpen}
+        onClickClose={() => setFavoriteOpen(false)}
+        favoriteItems={favoriteItems}
+        onRemoveItem={(obj) => onAddToFavorite(obj)}
+      />
+
       <div className="wrapper">
         <Header
           onChangeFilter={onChangeFilter}
           onClickBasket={() => setBasketOpen(true)}
+          onClickFavorite={() => setFavoriteOpen(true)}
           filterVal={filterVal}
         />
         <div className="categories">
@@ -114,6 +133,7 @@ function App() {
                   //   oldPrice={obj.oldPrice}
                   //   newPrice={obj.newPrice}
                   //   rating={obj.rating}
+                  onFavorite={(obj) => onAddToFavorite(obj)}
                   onPlus={(obj) => onAddToCart(obj)}
                 />
               ))}

@@ -1,6 +1,6 @@
 import styles from "./Header.module.scss";
 
-function Header({ onClickBasket, filterVal, onChangeFilter }) {
+function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
@@ -16,7 +16,7 @@ function Header({ onClickBasket, filterVal, onChangeFilter }) {
         />
       </div>
       <div className={styles.panel}>
-        <div className={styles.favorite}>
+        <div className={styles.favorite} onClick={onClickFavorite}>
           <img src="/prodCard/heart.png" alt="favorite"></img>
           <div className="panel__favorite-text">Избранное</div>
         </div>
