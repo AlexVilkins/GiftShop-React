@@ -8,6 +8,7 @@
   align-items: center;
   flex-direction: column;
   transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+  cursor: pointer;
 
 
   &:hover {
@@ -18,7 +19,7 @@
   .text {
     font-size: 14px;
     color: #2A1F20;
-    //font-weight: ;
+    font-weight: 500;
   }
 
   img {
