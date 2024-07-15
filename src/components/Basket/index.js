@@ -40,7 +40,19 @@ function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
                 </button>
               </div>
             ))}
-            <button className={styles.push}>Заказать</button>
+            <div className={styles.footer}>
+              <div className={styles.total}>
+                <div>Итого:</div>
+
+                <div>
+                  {addedItems.reduce((acc, item) => acc + item.newPrice, 0)} P
+                </div>
+              </div>
+              <button className={styles.push}>
+                Заказать
+                <img src="/arrow.png" alt="arrow" />
+              </button>
+            </div>
           </div>
         ) : (
           <div className={styles.empty}>Корзина пуста</div>

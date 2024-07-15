@@ -8,13 +8,15 @@ function Favorite({
 }) {
   return (
     <div
-      className={`${styles.basket} ${favoritOpen ? styles.basketVisible : ""}`}
+      className={`${styles.favorite} ${
+        favoritOpen ? styles.favoriteVisible : ""
+      }`}
     >
       <div className={styles.container}>
         <div className="title">Избранное</div>
-        <button className={styles.closeBasket} onClick={onClickClose}>
+        <button className={styles.closeFavorite} onClick={onClickClose}>
           <img
-            className={styles.closeBasket_img}
+            className={styles.closeFavorite_img}
             src="/close.png"
             alt="delete"
           />
@@ -45,7 +47,10 @@ function Favorite({
                 </button>
               </div>
             ))}
-            <button className={styles.push}>Назад</button>
+            <button onClick={onClickClose} className={styles.push}>
+              <img src="/arrow.png" alt="arrow" />
+              Назад
+            </button>
           </div>
         ) : (
           <div className={styles.empty}>Избранное пусто</div>
