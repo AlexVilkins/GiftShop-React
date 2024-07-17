@@ -1,6 +1,10 @@
 import styles from "./Basket.module.scss";
+import React from "react";
+import { AppContext } from "../../App";
 
 function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
+  const { basketPrice } = React.useContext(AppContext);
+
   return (
     <div
       className={`${styles.basket} ${basketOpen ? styles.basketVisible : ""}`}
@@ -44,9 +48,7 @@ function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
               <div className={styles.total}>
                 <div>Итого:</div>
 
-                <div>
-                  {addedItems.reduce((acc, item) => acc + item.newPrice, 0)} P
-                </div>
+                <div>{basketPrice() ? basketPrice() : 0} P</div>
               </div>
               <button className={styles.push}>
                 Заказать

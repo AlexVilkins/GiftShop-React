@@ -63,7 +63,6 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    // console.log(addedItems);
     if (addedItems.some((item) => item.id === obj.id)) {
       setAddedItems(addedItems.filter((item) => item.id !== obj.id));
       axios.delete(
@@ -98,9 +97,21 @@ function App() {
     return favoriteItems.some((obj) => Number(obj.id) === Number(id));
   };
 
+  const basketPrice = () => {
+    return addedItems.reduce((sum, obj) => {
+      return obj.newPrice + sum;
+    }, 0);
+  };
+
   return (
     <AppContext.Provider
-      value={{ products, favoriteItems, isItemAdded, isFavoriteAdded }}
+      value={{
+        products,
+        favoriteItems,
+        basketPrice,
+        isItemAdded,
+        isFavoriteAdded,
+      }}
     >
       <div>
         <Basket

@@ -1,8 +1,11 @@
 import styles from "./Header.module.scss";
-
+import React from "react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../App";
 
 function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
+  const { basketPrice } = React.useContext(AppContext);
+
   return (
     <div className={styles.header}>
       <Link to="/">
@@ -22,20 +25,16 @@ function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
       <div className={styles.panel}>
         <div className={styles.favorite} onClick={onClickFavorite}>
           <img src="/prodCard/heart.png" alt="favorite"></img>
-          <div className="panel__favorite-text">Избранное</div>
         </div>
         <div className={styles.basket} onClick={onClickBasket}>
-          <img
-            className="panel__basket-img"
-            src="/busket.svg"
-            alt="busket"
-          ></img>
-          <div className="panel__basket-text">Корзина</div>
+          <img src="/busket.svg" alt="busket"></img>
+          <div className={styles.pice}>
+            {basketPrice() > 0 ? basketPrice() : 0} руб.
+          </div>
         </div>
         <div className={styles.setup}>
           <Link to="/login">
             <img src="/setup.svg" alt="setup"></img>
-            {/* <div>Войти</div> */}
           </Link>
         </div>
       </div>
