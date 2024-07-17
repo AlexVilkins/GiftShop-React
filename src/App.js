@@ -1,11 +1,17 @@
 import Basket from "./components/Basket";
 import Favorite from "./components/Favorite";
 import Header from "./components/Header";
-import CategoriesCard from "./components/CategoriesCard";
-import ProductsCard from "./components/ProductsCard";
 import Footer from "./components/Footer";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Test from "./pages/Test";
+
 import React from "react";
 import axios from "axios";
+import { Routes, Route } from "react-router-dom";
+
+export const AppContext = React.createContext();
 
 function App() {
   const [category, setCategory] = React.useState([
@@ -40,12 +46,14 @@ function App() {
   const [addedItems, setAddedItems] = React.useState([]);
   const [favoriteItems, setFavoriteItems] = React.useState([]);
   const [filterVal, setFilterVal] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     axios
       .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/products")
       .then((response) => {
         setProducts(response.data);
+        setIsLoading(false);
       });
     axios
       .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket")
@@ -55,7 +63,7 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    console.log(addedItems);
+    // console.log(addedItems);
     if (addedItems.some((item) => item.id === obj.id)) {
       setAddedItems(addedItems.filter((item) => item.id !== obj.id));
       axios.delete(
@@ -82,66 +90,60 @@ function App() {
     setFilterVal(event.target.value);
   };
 
+  const isItemAdded = (id) => {
+    return addedItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
+  const isFavoriteAdded = (id) => {
+    return favoriteItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
   return (
-    <div>
-      <Basket
-        basketOpen={basketOpen}
-        onClickClose={() => setBasketOpen(false)}
-        addedItems={addedItems}
-        onRemoveItem={(obj) => onAddToCart(obj)}
-      />
-
-      <Favorite
-        favoritOpen={favoriteOpen}
-        onClickClose={() => setFavoriteOpen(false)}
-        favoriteItems={favoriteItems}
-        onRemoveItem={(obj) => onAddToFavorite(obj)}
-      />
-
-      <div className="wrapper">
-        <Header
-          onChangeFilter={onChangeFilter}
-          onClickBasket={() => setBasketOpen(true)}
-          onClickFavorite={() => setFavoriteOpen(true)}
-          filterVal={filterVal}
+    <AppContext.Provider
+      value={{ products, favoriteItems, isItemAdded, isFavoriteAdded }}
+    >
+      <div>
+        <Basket
+          basketOpen={basketOpen}
+          onClickClose={() => setBasketOpen(false)}
+          addedItems={addedItems}
+          onRemoveItem={(obj) => onAddToCart(obj)}
         />
-        <div className="categories">
-          <div className="title">Категории</div>
-          <div className="categories__items">
-            {category.map((item) => (
-              <CategoriesCard key={item.id} img={item.img} text={item.text} />
-            ))}
-          </div>
-        </div>
-        <div className="products">
-          <div className="title">
-            {filterVal ? `Поиск по запросу: ${filterVal}` : "Все товары"}
-          </div>
-          <div className="products__items">
-            {products
-              .filter((obj) =>
-                obj.text
-                  .toLocaleLowerCase()
-                  .includes(filterVal.toLocaleLowerCase())
-              )
-              .map((obj, index) => (
-                <ProductsCard
-                  obj={obj}
-                  key={index}
-                  //   img={obj.img}
-                  //   text={obj.text}
-                  //   oldPrice={obj.oldPrice}
-                  //   newPrice={obj.newPrice}
-                  //   rating={obj.rating}
-                  onFavorite={(obj) => onAddToFavorite(obj)}
-                  onPlus={(obj) => onAddToCart(obj)}
+
+        <Favorite
+          favoritOpen={favoriteOpen}
+          onClickClose={() => setFavoriteOpen(false)}
+          // favoriteItems={favoriteItems}
+          onRemoveItem={(obj) => onAddToFavorite(obj)}
+        />
+
+        <div className="wrapper">
+          <Header
+            onChangeFilter={onChangeFilter}
+            onClickBasket={() => setBasketOpen(true)}
+            onClickFavorite={() => setFavoriteOpen(true)}
+            filterVal={filterVal}
+          />
+          <Routes>
+            <Route
+              path="/"
+              exact
+              element={
+                <Home
+                  isLoading={isLoading}
+                  category={category}
+                  filterVal={filterVal}
+                  onAddToCart={onAddToCart}
+                  onAddToFavorite={onAddToFavorite}
                 />
-              ))}
-          </div>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+          </Routes>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </AppContext.Provider>
   );
 }
 

@@ -1,11 +1,15 @@
 import styles from "./Header.module.scss";
 
+import { Link } from "react-router-dom";
+
 function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
   return (
     <div className={styles.header}>
-      <div className={styles.logo}>
-        <img src="/img.png" alt="logo" />
-      </div>
+      <Link to="/">
+        <div className={styles.logo}>
+          <img src="/img.png" alt="logo" />
+        </div>
+      </Link>
       <div className={styles.filter}>
         <img src="/filter.png" alt="filter" />
         <input
@@ -29,8 +33,10 @@ function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
           <div className="panel__basket-text">Корзина</div>
         </div>
         <div className={styles.setup}>
-          <img src="/setup.svg" alt="setup"></img>
-          <div>Войти</div>
+          <Link to="/login">
+            <img src="/setup.svg" alt="setup"></img>
+            {/* <div>Войти</div> */}
+          </Link>
         </div>
       </div>
     </div>

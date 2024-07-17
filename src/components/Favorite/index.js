@@ -1,11 +1,13 @@
+import React from "react";
+
+import { AppContext } from "../../App";
+
 import styles from "./Favorite.module.scss";
 
-function Favorite({
-  favoritOpen,
-  onClickClose,
-  favoriteItems = [],
-  onRemoveItem,
-}) {
+function Favorite({ favoritOpen, onClickClose, onRemoveItem }) {
+  const { favoriteItems } = React.useContext(AppContext);
+  console.log("favoriteItems", favoriteItems);
+
   return (
     <div
       className={`${styles.favorite} ${
