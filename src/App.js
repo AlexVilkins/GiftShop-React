@@ -54,26 +54,37 @@ function App() {
       .then((response) => {
         setProducts(response.data);
         setIsLoading(false);
+      })
+      .catch((error) => {
+        alert("Произошла ошибка при запросе данных");
       });
     axios
       .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket")
       .then((response) => {
         setAddedItems(response.data);
+      })
+      .catch((error) => {
+        alert("Произошла ошибка при запросе данных");
       });
   }, []);
 
   const onAddToCart = (obj) => {
     if (addedItems.some((item) => item.id === obj.id)) {
       setAddedItems(addedItems.filter((item) => item.id !== obj.id));
-      axios.delete(
-        `https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket/${obj.id}`
-      );
+      axios
+        .delete(
+          `https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket/${obj.id}`
+        )
+        .catch((error) => {
+          alert("Произошла ошибка при запросе данных");
+        });
     } else {
       setAddedItems([...addedItems, obj]);
-      axios.post(
-        "https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket",
-        obj
-      );
+      axios
+        .post("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket", obj)
+        .catch((error) => {
+          alert("Произошла ошибка при запросе данных");
+        });
     }
   };
 
