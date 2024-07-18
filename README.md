@@ -1,10 +1,12 @@
 # GiftShop-React
- This project was writen for junior level taining
 
-```scss```
+This project was writen for junior level taining
+
+`scss` `router` `axios` `sceleton`
 
 ### Установка
-1. Клонирование репозитория ```git clone https://github.com/AlexVilkins/GiftShop-React```
-2. Переход в директорию cd ```GiftShop-React```
-3. Установка зависимостей ```npm install```
-4. Запуск ```npm start```
+
+1. Клонирование репозитория `git clone https://github.com/AlexVilkins/GiftShop-React`
+2. Переход в директорию cd `GiftShop-React`
+3. Установка зависимостей `npm install`
+4. Запуск `npm start`
