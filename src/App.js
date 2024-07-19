@@ -1,5 +1,6 @@
 import Basket from "./components/Basket";
 import Favorite from "./components/Favorite";
+import Order from "./components/Order";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -7,7 +8,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Test from "./pages/Test";
 
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 
@@ -43,8 +44,11 @@ function App() {
   const [products, setProducts] = React.useState([]);
   const [basketOpen, setBasketOpen] = React.useState(false);
   const [favoriteOpen, setFavoriteOpen] = React.useState(false);
+  const [orderOpen, setOrderOpen] = React.useState(false);
   const [addedItems, setAddedItems] = React.useState([]);
   const [favoriteItems, setFavoriteItems] = React.useState([]);
+  const [orderTotal, setOrderTotal] = React.useState([]);
+  const [orderNumber, setOrderNumber] = React.useState(1);
   const [filterVal, setFilterVal] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -114,14 +118,25 @@ function App() {
     }, 0);
   };
 
+  const pushOrderTotal = (item) => {
+    setOrderNumber(orderNumber + 1);
+    setOrderTotal([...orderTotal, { ...item, orderNumber: orderNumber }]);
+  };
+
+  useEffect(() => {
+    console.log(orderTotal);
+  }, [orderTotal]);
+
   return (
     <AppContext.Provider
       value={{
         products,
         favoriteItems,
+        orderTotal,
         basketPrice,
         isItemAdded,
         isFavoriteAdded,
+        pushOrderTotal,
       }}
     >
       <div>
@@ -139,11 +154,14 @@ function App() {
           onRemoveItem={(obj) => onAddToFavorite(obj)}
         />
 
+        <Order orderOpen={orderOpen} onClickClose={() => setOrderOpen(false)} />
+
         <div className="wrapper">
           <Header
             onChangeFilter={onChangeFilter}
             onClickBasket={() => setBasketOpen(true)}
             onClickFavorite={() => setFavoriteOpen(true)}
+            onClickOrders={() => setOrderOpen(true)}
             filterVal={filterVal}
           />
           <Routes>

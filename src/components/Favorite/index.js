@@ -6,7 +6,6 @@ import styles from "./Favorite.module.scss";
 
 function Favorite({ favoritOpen, onClickClose, onRemoveItem }) {
   const { favoriteItems } = React.useContext(AppContext);
-  console.log("favoriteItems", favoriteItems);
 
   return (
     <div
@@ -55,7 +54,16 @@ function Favorite({ favoritOpen, onClickClose, onRemoveItem }) {
             </button>
           </div>
         ) : (
-          <div className={styles.empty}>Избранное пусто</div>
+          <>
+            <div className={styles.text}>
+              <img src="./empty_box.png" alt="empty" />
+              Избранное пусто
+            </div>
+            <button onClick={onClickClose} className={styles.empty}>
+              <img src="/arrow.png" alt="arrow" />
+              Назад
+            </button>
+          </>
         )}
       </div>
     </div>

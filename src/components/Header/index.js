@@ -3,7 +3,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../App";
 
-function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
+function Header({
+  onClickBasket,
+  onClickFavorite,
+  onClickOrders,
+  filterVal,
+  onChangeFilter,
+}) {
   const { basketPrice } = React.useContext(AppContext);
 
   return (
@@ -31,6 +37,9 @@ function Header({ onClickBasket, onClickFavorite, filterVal, onChangeFilter }) {
           <div className={styles.pice}>
             {basketPrice() > 0 ? basketPrice() : 0} руб.
           </div>
+        </div>
+        <div className={styles.orders} onClick={onClickOrders}>
+          <img src="/orders.png" alt="orders" />
         </div>
         <div className={styles.setup}>
           <Link to="/login">
