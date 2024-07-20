@@ -4,10 +4,22 @@ import React, { useState } from "react";
 
 import { AppContext } from "../../App";
 
-function ProdCard({ obj, onPlus, onFavorite, isLoading }) {
+function ProdCard({
+  id,
+  img,
+  text,
+  oldPrice,
+  newPrice,
+  rating,
+  onPlus,
+  onFavorite,
+  isLoading,
+}) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const { isItemAdded, isFavoriteAdded } = React.useContext(AppContext);
+
+  const obj = { id, parentId: id, img, text, oldPrice, newPrice, rating };
 
   const favoriteOnClick = () => {
     setIsFavorite(!isFavorite);

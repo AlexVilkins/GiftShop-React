@@ -105,7 +105,8 @@ function App() {
   };
 
   const isItemAdded = (id) => {
-    return addedItems.some((obj) => Number(obj.id) === Number(id));
+    console.log(addedItems);
+    return addedItems.some((obj) => Number(obj.parentId) === Number(id));
   };
 
   const isFavoriteAdded = (id) => {

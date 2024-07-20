@@ -40,7 +40,7 @@ function Home({
                 )
                 .map((obj, index) => (
                   <ProductsCard
-                    obj={obj}
+                    {...obj}
                     key={index}
                     isLoading={isLoading}
                     onFavorite={(obj) => onAddToFavorite(obj)}
