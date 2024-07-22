@@ -51,6 +51,7 @@ function App() {
   const [orderNumber, setOrderNumber] = React.useState(1);
   const [filterVal, setFilterVal] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
+  const [push, setPush] = React.useState(false);
 
   React.useEffect(() => {
     axios
@@ -72,23 +73,46 @@ function App() {
       });
   }, []);
 
-  const onAddToCart = (obj) => {
-    if (addedItems.some((item) => item.id === obj.id)) {
-      setAddedItems(addedItems.filter((item) => item.id !== obj.id));
-      axios
-        .delete(
-          `https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket/${obj.id}`
+  const onAddToCart = async (obj) => {
+    try {
+      const findItem = addedItems.find(
+        (item) => Number(item.parentId) === Number(obj.parentId)
+      );
+
+      if (
+        addedItems.some(
+          (item) => Number(item.parentId) === Number(obj.parentId)
         )
-        .catch((error) => {
-          alert("Произошла ошибка при запросе данных");
-        });
-    } else {
-      setAddedItems([...addedItems, obj]);
-      axios
-        .post("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket", obj)
-        .catch((error) => {
-          alert("Произошла ошибка при запросе данных");
-        });
+      ) {
+        setAddedItems(
+          addedItems.filter(
+            (item) => Number(item.parentId) !== Number(obj.parentId)
+          )
+        );
+        await axios.delete(
+          `https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket/${findItem.id}`
+        );
+      } else {
+        setAddedItems([...addedItems, obj]);
+        const { data } = await axios.post(
+          "https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket",
+          obj
+        );
+
+        setAddedItems((prev) =>
+          prev.map((item) => {
+            if (item.parentId === data.parentId) {
+              return {
+                ...item,
+                id: data.id,
+              };
+            }
+            return item;
+          })
+        );
+      }
+    } catch (error) {
+      alert("Произошла ошибка при запросе данных", error);
     }
   };
 
@@ -105,7 +129,6 @@ function App() {
   };
 
   const isItemAdded = (id) => {
-    console.log(addedItems);
     return addedItems.some((obj) => Number(obj.parentId) === Number(id));
   };
 
@@ -122,11 +145,11 @@ function App() {
   const pushOrderTotal = (item) => {
     setOrderNumber(orderNumber + 1);
     setOrderTotal([...orderTotal, { ...item, orderNumber: orderNumber }]);
+    setAddedItems([]);
+    setPush(true);
   };
 
-  useEffect(() => {
-    console.log(orderTotal);
-  }, [orderTotal]);
+  useEffect(() => {}, [orderTotal]);
 
   return (
     <AppContext.Provider
@@ -134,6 +157,7 @@ function App() {
         products,
         favoriteItems,
         orderTotal,
+        push,
         basketPrice,
         isItemAdded,
         isFavoriteAdded,

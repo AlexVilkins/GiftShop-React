@@ -18,10 +18,10 @@ function Order({ orderOpen, onClickClose }) {
         <div>
           {orderTotal.map((item) => (
             <div className={styles.order_card} key={item.id}>
-              {Object.keys(item).map((key) => {
+              {Object.keys(item).map((key, index) => {
                 if (key !== "orderNumber") {
                   return (
-                    <div className={styles.order_item} key={key}>
+                    <div className={styles.order_item} key={index}>
                       <img
                         src={item[key].img}
                         alt="logo"
@@ -33,7 +33,7 @@ function Order({ orderOpen, onClickClose }) {
                       </div>
                     </div>
                   );
-                }
+                } else return null;
               })}
               Заказ номер: #{item.orderNumber}
             </div>

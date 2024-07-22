@@ -3,7 +3,7 @@ import React from "react";
 import { AppContext } from "../../App";
 
 function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
-  const { basketPrice, pushOrderTotal } = React.useContext(AppContext);
+  const { basketPrice, pushOrderTotal, push } = React.useContext(AppContext);
 
   return (
     <div
@@ -62,7 +62,7 @@ function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
         ) : (
           <>
             <div className={styles.text}>
-              <img src="./empty_box.png" alt="empty" />
+              <img src={push ? "/add_box.png" : "/empty_box.png"} alt="empty" />
               Корзина пуста
             </div>
             <button onClick={onClickClose} className={styles.empty}>

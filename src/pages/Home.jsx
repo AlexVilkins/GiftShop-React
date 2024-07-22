@@ -18,8 +18,8 @@ function Home({
       <div className="categories">
         <div className="title">Категории</div>
         <div className="categories__items">
-          {category.map((item) => (
-            <CategoriesCard key={item.id} img={item.img} text={item.text} />
+          {category.map((item, index) => (
+            <CategoriesCard key={index} img={item.img} text={item.text} />
           ))}
         </div>
       </div>
