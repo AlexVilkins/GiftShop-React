@@ -62,6 +62,7 @@ function App() {
       })
       .catch((error) => {
         alert("Произошла ошибка при запросе данных");
+        console.log(error);
       });
     axios
       .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket")
@@ -70,6 +71,7 @@ function App() {
       })
       .catch((error) => {
         alert("Произошла ошибка при запросе данных");
+        console.log(error);
       });
   }, []);
 
@@ -112,7 +114,8 @@ function App() {
         );
       }
     } catch (error) {
-      alert("Произошла ошибка при запросе данных", error);
+      alert("Произошла ошибка при запросе данных");
+      console.log(error);
     }
   };
 
