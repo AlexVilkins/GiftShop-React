@@ -1,0 +1,40 @@
+@import "components/all";
+@import "variables";
+
+body {
+  margin: 0;
+  background-color: $backgroundColor;
+  padding: 100px;
+}
+
+* {
+  font-family: "Montserrat";
+}
+
+.wrapper {
+  background-color: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px;
+}
+
+.categories {
+  .categories__items {
+    display: flex;
+
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.products {
+  .products__items {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

@@ -1,7 +1,8 @@
+@import "../_variables.scss";
+
 .card {
   border-radius: 10px;
   width: 200px;
-  //height: 430px;
   padding: 10px;
   margin: 10px;
   display: flex;
@@ -14,85 +15,82 @@
     transform: translateY(-5px);
   }
 
-  .img {
+  &__discount {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__stock {
+    border-radius: 3px;
+    width: max-content;
+    margin: 5px;
+    padding: 3px;
+    background-color: $accentColor;
+    color: $dopColor;
+
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__img {
     display: block;
     margin: 10px auto;
     width: 100px;
     height: 100px;
   }
 
-  .discount {
-    display: flex;
-    justify-content: flex-start;
-
-    .stock{
-      border-radius: 3px;
-      width: max-content;
-      margin:5px;
-      padding: 3px;
-      background-color: #9DD558;
-      color: #FFFFFF;
-
-      font-size: 13px;
-      font-weight: 500;
-    }
-  }
-
-  .rating {
+  &__rating {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 
-    img {
+    &-img {
       width: 15px;
       height: 15px;
     }
 
-    .rating__text {
-      color: #9DD558;
+    &-text {
+      color: $accentColor;
       font-weight: bold;
       font-size: 14px;
     }
   }
 
-  .text {
+  &__description {
     font-size: 14px;
-    color: #2A1F20;
+    color: $textColor;
     font-weight: bold;
   }
 
-  .panel {
+  &__price {
     display: flex;
     justify-content: space-between;
 
-    .price__new {
-      color: #9DD558;
+    &-new {
+      color: $accentColor;
       font-size: 20px;
       font-weight: bold;
     }
 
-    .price_old {
-      color: #8C8C8C;
+    &-old {
+      color: $textColor;
       font-size: 14px;
       text-decoration: line-through;
     }
+  }
 
-    button {
-      width: 25px;
-      height: 25px;
-      margin: 5px;
-      padding: 0px;
-      background-color: transparent;
-      border-color: transparent;
-      cursor: pointer;
-    }
+  &__button {
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    padding: 0px;
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
 
-
-    .add, .favorite {
+    &-img {
       width: 25px;
       height: 25px;
     }
   }
-
-
 }

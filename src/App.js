@@ -1,46 +1,52 @@
-import Basket from "./components/Basket";
-import Favorite from "./components/Favorite";
-import Order from "./components/Order";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Test from "./pages/Test";
+import { Header, Basket, Favorite, Order, Footer } from "./components";
+import {
+  featchItems,
+  featchBasket,
+  deleteBasketItem,
+  addBasketItem,
+} from "./api";
 
-import React, { useEffect } from "react";
-import axios from "axios";
+import phone from "./assets/products/phone.png";
+import clean from "./assets/products/clean.png";
+import home from "./assets/products/home.png";
+import pen from "./assets/products/pen.png";
+import pot from "./assets/products/pot.png";
+import toy from "./assets/products/toy.png";
+
 import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
 
 export const AppContext = React.createContext();
 
 function App() {
-  const [category, setCategory] = React.useState([
+  const category = [
     {
-      img: "/products/phone.png",
+      img: phone,
       text: "Смартфоны",
     },
     {
-      img: "/products/clean.png",
+      img: clean,
       text: "Бытовая техника",
     },
     {
-      img: "/products/home.png",
+      img: home,
       text: "Товары для дома",
     },
     {
-      img: "/products/pen.png",
+      img: pen,
       text: "Канцелярия",
     },
     {
-      img: "/products/pot.png",
+      img: pot,
       text: "Посуда",
     },
     {
-      img: "/products/toy.png",
+      img: toy,
       text: "Игрушки",
     },
-  ]);
+  ];
   const [products, setProducts] = React.useState([]);
   const [basketOpen, setBasketOpen] = React.useState(false);
   const [favoriteOpen, setFavoriteOpen] = React.useState(false);
@@ -54,68 +60,46 @@ function App() {
   const [push, setPush] = React.useState(false);
 
   React.useEffect(() => {
-    axios
-      .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/products")
-      .then((response) => {
-        setProducts(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        alert("Произошла ошибка при запросе данных");
-        console.log(error);
-      });
-    axios
-      .get("https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket")
-      .then((response) => {
-        setAddedItems(response.data);
-      })
-      .catch((error) => {
-        alert("Произошла ошибка при запросе данных");
-        console.log(error);
-      });
+    const featchaData = async () => {
+      const dataItems = await featchItems();
+      const dataBasket = await featchBasket();
+      setProducts(dataItems);
+      setIsLoading(false);
+      setAddedItems(dataBasket);
+    };
+
+    featchaData();
   }, []);
 
   const onAddToCart = async (obj) => {
-    try {
-      const findItem = addedItems.find(
-        (item) => Number(item.parentId) === Number(obj.parentId)
-      );
+    const findItem = addedItems.find(
+      (item) => Number(item.parentId) === Number(obj.parentId)
+    );
 
-      if (
-        addedItems.some(
-          (item) => Number(item.parentId) === Number(obj.parentId)
+    if (
+      addedItems.some((item) => Number(item.parentId) === Number(obj.parentId))
+    ) {
+      setAddedItems(
+        addedItems.filter(
+          (item) => Number(item.parentId) !== Number(obj.parentId)
         )
-      ) {
-        setAddedItems(
-          addedItems.filter(
-            (item) => Number(item.parentId) !== Number(obj.parentId)
-          )
-        );
-        await axios.delete(
-          `https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket/${findItem.id}`
-        );
-      } else {
-        setAddedItems([...addedItems, obj]);
-        const { data } = await axios.post(
-          "https://66910f4126c2a69f6e8e426e.mockapi.io/test/basket",
-          obj
-        );
+      );
+      await deleteBasketItem(findItem.id);
+    } else {
+      setAddedItems([...addedItems, obj]);
+      const { data } = await addBasketItem(obj);
 
-        setAddedItems((prev) =>
-          prev.map((item) => {
-            if (item.parentId === data.parentId) {
-              return {
-                ...item,
-                id: data.id,
-              };
-            }
-            return item;
-          })
-        );
-      }
-    } catch (error) {
-      alert("Произошла ошибка при запросе данных");
-      console.log(error);
+      setAddedItems((prev) =>
+        prev.map((item) => {
+          if (item.parentId === data.parentId) {
+            return {
+              ...item,
+              id: data.id,
+            };
+          }
+          return item;
+        })
+      );
     }
   };
 
@@ -167,50 +151,48 @@ function App() {
         pushOrderTotal,
       }}
     >
-      <div>
-        <Basket
-          basketOpen={basketOpen}
-          onClickClose={() => setBasketOpen(false)}
-          addedItems={addedItems}
-          onRemoveItem={(obj) => onAddToCart(obj)}
+      <Basket
+        basketOpen={basketOpen}
+        onClickClose={() => setBasketOpen(false)}
+        addedItems={addedItems}
+        onRemoveItem={(obj) => onAddToCart(obj)}
+      />
+
+      <Favorite
+        favoritOpen={favoriteOpen}
+        onClickClose={() => setFavoriteOpen(false)}
+        onRemoveItem={(obj) => onAddToFavorite(obj)}
+      />
+
+      <Order orderOpen={orderOpen} onClickClose={() => setOrderOpen(false)} />
+
+      <div className="wrapper">
+        <Header
+          onChangeFilter={onChangeFilter}
+          onClickBasket={() => setBasketOpen(true)}
+          onClickFavorite={() => setFavoriteOpen(true)}
+          onClickOrders={() => setOrderOpen(true)}
+          filterVal={filterVal}
         />
 
-        <Favorite
-          favoritOpen={favoriteOpen}
-          onClickClose={() => setFavoriteOpen(false)}
-          // favoriteItems={favoriteItems}
-          onRemoveItem={(obj) => onAddToFavorite(obj)}
-        />
-
-        <Order orderOpen={orderOpen} onClickClose={() => setOrderOpen(false)} />
-
-        <div className="wrapper">
-          <Header
-            onChangeFilter={onChangeFilter}
-            onClickBasket={() => setBasketOpen(true)}
-            onClickFavorite={() => setFavoriteOpen(true)}
-            onClickOrders={() => setOrderOpen(true)}
-            filterVal={filterVal}
+        <Routes>
+          <Route
+            path="/"
+            exact
+            element={
+              <Home
+                isLoading={isLoading}
+                category={category}
+                filterVal={filterVal}
+                onAddToCart={onAddToCart}
+                onAddToFavorite={onAddToFavorite}
+              />
+            }
           />
-          <Routes>
-            <Route
-              path="/"
-              exact
-              element={
-                <Home
-                  isLoading={isLoading}
-                  category={category}
-                  filterVal={filterVal}
-                  onAddToCart={onAddToCart}
-                  onAddToFavorite={onAddToFavorite}
-                />
-              }
-            />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </div>
-        <Footer />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </div>
+      <Footer />
     </AppContext.Provider>
   );
 }

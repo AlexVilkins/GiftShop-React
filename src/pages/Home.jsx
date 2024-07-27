@@ -1,7 +1,6 @@
-import CategoriesCard from "../components/CategoriesCard";
-import ProductsCard from "../components/ProductsCard";
-
+import { Card, Categories } from "../components";
 import { AppContext } from "../App";
+
 import React from "react";
 
 function Home({
@@ -19,7 +18,7 @@ function Home({
         <div className="title">Категории</div>
         <div className="categories__items">
           {category.map((item, index) => (
-            <CategoriesCard key={index} img={item.img} text={item.text} />
+            <Categories key={index} img={item.img} text={item.text} />
           ))}
         </div>
       </div>
@@ -30,7 +29,7 @@ function Home({
         <div className="products__items">
           {isLoading
             ? [...Array(8)].map((obj, index) => (
-                <ProductsCard obj={obj} key={index} isLoading={isLoading} />
+                <Card obj={obj} key={index} isLoading={isLoading} />
               ))
             : products
                 .filter((obj) =>
@@ -39,7 +38,7 @@ function Home({
                     .includes(filterVal.toLocaleLowerCase())
                 )
                 .map((obj, index) => (
-                  <ProductsCard
+                  <Card
                     {...obj}
                     key={index}
                     isLoading={isLoading}
