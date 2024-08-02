@@ -7,8 +7,21 @@ import add_box from "../assets/add_box.png";
 import empty_box from "../assets/empty_box.png";
 import phone from "../assets/products/phone.png";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setAddOrder } from "../redux/actions/order";
+
 function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
-  const { basketPrice, pushOrderTotal, push } = React.useContext(AppContext);
+  const { basketPrice, pushOrderTotal } = React.useContext(AppContext);
+  const [orderNumber, setOrderNumber] = React.useState(1);
+  const dispatch = useDispatch();
+
+  const onOrderProduct = () => {
+    setOrderNumber(orderNumber + 1);
+    dispatch(setAddOrder(orderNumber, addedItems));
+    pushOrderTotal();
+  };
+
+  const orderCount = useSelector(({ order }) => order);
 
   return (
     <div className={`${"basket"} ${basketOpen ? "basketVisible" : ""}`}>
@@ -50,7 +63,7 @@ function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
               </div>
               <button
                 className="basket-footer__push"
-                onClick={() => pushOrderTotal(addedItems)}
+                onClick={() => onOrderProduct()}
               >
                 Заказать
                 <img
@@ -64,7 +77,7 @@ function Basket({ basketOpen, onClickClose, addedItems = [], onRemoveItem }) {
         ) : (
           <>
             <div className="basket-empty">
-              <img src={push ? add_box : empty_box} alt="empty" />
+              <img src={orderCount.length ? add_box : empty_box} alt="empty" />
               Корзина пуста
             </div>
             <button className="basket-empty__button" onClick={onClickClose}>

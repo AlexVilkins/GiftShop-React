@@ -2,7 +2,7 @@
 
 This project was writen for junior level taining
 
-`scss` `router` `axios` `sceleton`
+`scss` `router` `axios` `sceleton` `redux` `react-redux` `redux-thunk`
 
 ### Установка
 

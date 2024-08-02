@@ -1,16 +1,28 @@
 import { Card, Categories } from "../components";
-import { AppContext } from "../App";
+
+import { setAddProducts } from "../redux/actions/products";
+import { featchItems } from "../api";
 
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-function Home({
+const Home = React.memo(function Home({
   category,
   filterVal,
   onAddToFavorite,
   onAddToCart,
   isLoading,
 }) {
-  const { products } = React.useContext(AppContext);
+  const dispatch = useDispatch();
+  const products = useSelector(({ products }) => products.items);
+  console.log("products", products);
+  React.useEffect(() => {
+    const featchData = async () => {
+      dispatch(setAddProducts(await featchItems()));
+    };
+
+    featchData();
+  }, []);
 
   return (
     <>
@@ -50,6 +62,6 @@ function Home({
       </div>
     </>
   );
-}
+});
 
 export default Home;

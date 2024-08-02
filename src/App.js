@@ -1,12 +1,7 @@
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { Header, Basket, Favorite, Order, Footer } from "./components";
-import {
-  featchItems,
-  featchBasket,
-  deleteBasketItem,
-  addBasketItem,
-} from "./api";
+import { featchBasket, deleteBasketItem, addBasketItem } from "./api";
 
 import phone from "./assets/products/phone.png";
 import clean from "./assets/products/clean.png";
@@ -15,8 +10,11 @@ import pen from "./assets/products/pen.png";
 import pot from "./assets/products/pot.png";
 import toy from "./assets/products/toy.png";
 
+import { setAddBasket } from "./redux/actions/basket";
+
 import { Routes, Route } from "react-router-dom";
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export const AppContext = React.createContext();
 
@@ -47,23 +45,23 @@ function App() {
       text: "Игрушки",
     },
   ];
-  const [products, setProducts] = React.useState([]);
   const [basketOpen, setBasketOpen] = React.useState(false);
   const [favoriteOpen, setFavoriteOpen] = React.useState(false);
   const [orderOpen, setOrderOpen] = React.useState(false);
   const [addedItems, setAddedItems] = React.useState([]);
   const [favoriteItems, setFavoriteItems] = React.useState([]);
   const [orderTotal, setOrderTotal] = React.useState([]);
-  const [orderNumber, setOrderNumber] = React.useState(1);
   const [filterVal, setFilterVal] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
-  const [push, setPush] = React.useState(false);
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const featchaData = async () => {
-      const dataItems = await featchItems();
+      dispatch(setAddBasket(featchBasket()));
+
       const dataBasket = await featchBasket();
-      setProducts(dataItems);
+
       setIsLoading(false);
       setAddedItems(dataBasket);
     };
@@ -129,11 +127,8 @@ function App() {
     }, 0);
   };
 
-  const pushOrderTotal = (item) => {
-    setOrderNumber(orderNumber + 1);
-    setOrderTotal([...orderTotal, { ...item, orderNumber: orderNumber }]);
+  const pushOrderTotal = () => {
     setAddedItems([]);
-    setPush(true);
   };
 
   useEffect(() => {}, [orderTotal]);
@@ -141,10 +136,8 @@ function App() {
   return (
     <AppContext.Provider
       value={{
-        products,
         favoriteItems,
         orderTotal,
-        push,
         basketPrice,
         isItemAdded,
         isFavoriteAdded,
